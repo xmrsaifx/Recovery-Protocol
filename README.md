@@ -1,82 +1,66 @@
-# Decentralized Recovery Protocol (DRP)
+## Foundry
 
-## Product Name
-**LifeKey Protocol** – assets live on even if keys are lost.
+**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
-## Introduction
-In blockchain ecosystems today, one of the biggest risks to individuals is **loss of access to digital assets** due to misplaced private keys or inaccessible wallets. Unlike stolen funds, which are a legal and forensic challenge, **lost funds have no standard mechanism for recovery**.  
+Foundry consists of:
 
-This project proposes a **smart contract framework on EVM-compatible chains** that introduces a recovery model based on **beneficiary consensus**. The protocol maintains decentralization, avoids third-party custodianship, and provides resilience for asset owners.
+-   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
+-   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+-   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
+-   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
----
+## Documentation
 
-## Problem
-- **Lost private keys = permanent loss of funds**  
-- No standardized approach to designate trusted recovery parties  
-- Billions of dollars in assets remain unrecoverable  
-- Users fear onboarding into crypto due to these risks  
+https://book.getfoundry.sh/
 
----
+## Usage
 
-## Proposed Solution
+### Build
 
-### 1. User Registration & Approval
-- Users register their wallets with the recovery contract.  
-- They grant **approval** for the contract to manage recovery if needed.  
-- Each user sets a list of **beneficiaries** (trusted addresses).  
+```shell
+$ forge build
+```
 
-### 2. Recovery Request
-- If the owner loses access, one beneficiary can initiate a **recovery request**.  
-- The request proposes a **new owner address**.  
+### Test
 
-### 3. Consensus Mechanism
-- Other beneficiaries vote to approve or reject the request.  
-- A **minimum threshold** (e.g., majority or predefined %) must approve.  
+```shell
+$ forge test
+```
 
-### 4. Ownership Update
-- Once approved, the contract updates the official "owner" address.  
-- The new owner gains full access to claim the assets.  
+### Format
 
-### 5. Fund Claim
-- The **claim function** uses `transferFrom` or equivalent safe transfers.  
-- All recoverable funds are moved from the old wallet to the new owner.  
+```shell
+$ forge fmt
+```
 
----
+### Gas Snapshots
 
-## Tokenomics & Sustainability
-- **Presale model** to raise initial funds.  
-- **Transaction fee structure** ensures long-term sustainability.  
-- **Buyback & burn mechanism** with part of the fees → strengthens token value.  
+```shell
+$ forge snapshot
+```
 
----
+### Anvil
 
-## Impact
-- **Users:** Safer entry into blockchain, reduced risk of catastrophic loss.  
-- **Ecosystem:** More trust and stability in digital asset management.  
-- **Academia & Industry:** Opens new avenues for research and innovation on decentralized recovery systems.  
-- **Financial Systems:** Supports long-term sustainability through tokenomics.  
+```shell
+$ anvil
+```
 
----
+### Deploy
 
-## Future Work
-This project is in the **idea and design phase**. Planned enhancements include:
-- Expanding to a **multi-chain protocol** (beyond EVM).  
-- Integration with **account abstraction (ERC-4337)** for smoother user experience.  
-- Formal **verification & auditing** of the recovery logic.    
-- Potential **integration with wallets** and **DeFi platforms**.  
-- Exploration of the **legal and regulatory dimensions** of decentralized recovery.  
+```shell
+$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```
 
----
+### Cast
 
-## Roadmap
-1. **Prototype Smart Contract** → implement basic recovery workflow.  
-2. **Security Audit & Testing** → fuzzing, formal verification, simulations.  
-3. **Presale & Tokenomics Launch** → establish sustainable model.  
-4. **Mainnet Deployment** → make protocol accessible to real users.  
-5. **Continuous Refactoring** → idea will be enhanced and updated over time.  
+```shell
+$ cast <subcommand>
+```
 
----
+### Help
 
-## Note
-This repository serves as a **proof of ownership** and foundation for a future product or protocol.  
-The idea will be **continuously refactored and enhanced** as feedback, research insights, and technical improvements are incorporated.    
+```shell
+$ forge --help
+$ anvil --help
+$ cast --help
+```
