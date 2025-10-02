@@ -1,5 +1,8 @@
 # Decentralized Recovery Protocol (DRP)
 
+## Product Name
+**LifeKey Protocol** – assets live on even if keys are lost.
+
 ## Introduction
 In blockchain ecosystems today, one of the biggest risks to individuals is **loss of access to digital assets** due to misplaced private keys or inaccessible wallets. Unlike stolen funds, which are a legal and forensic challenge, **lost funds have no standard mechanism for recovery**.  
 
