@@ -56,15 +56,9 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         address[] newAssets
     );
 
-    event RecoveryCancelled(
-        uint256 indexed lifeKeyId,
-        address indexed owner
-    );
+    event RecoveryCancelled(uint256 indexed lifeKeyId, address indexed owner);
 
-    event LifeKeyDeleted(
-        uint256 indexed lifeKeyId,
-        address indexed owner
-    );
+    event LifeKeyDeleted(uint256 indexed lifeKeyId, address indexed owner);
 
     event RecoveryClaimed(
         uint256 indexed lifeKeyId,
@@ -116,12 +110,8 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
 
         lifeKeyCreated[msg.sender] = true;
         lifeKeyDetails[lifeKeyID] = newLifeKey;
-        emit LifeKeyCreated(
-            lifeKeyID,
-            msg.sender,
-            beneficiaries,
-            assets
-        );
+
+        emit LifeKeyCreated(lifeKeyID, msg.sender, beneficiaries, assets);
         return lifeKeyID;
     }
 

@@ -68,6 +68,13 @@ This project is in the **idea and design phase**. Planned enhancements include:
 
 ---
 
+## Frontend Playground
+- Navigate to `frontend/` for a Vite + React implementation of the owner, beneficiary, and claim consoles.  
+- Copy `.env.example` to `.env.local`, add `VITE_LIFEKEY_PROXY`, RPC URL, and chain id, then run `npm install` followed by `npm run dev`.  
+- The app bundles the contract ABI (see `src/assets/abi`) and uses wagmi/viem for on-chain reads, writes, and live event updates.
+
+---
+
 ## Roadmap
 1. **Prototype Smart Contract** → implement basic recovery workflow.  
 2. **Security Audit & Testing** → fuzzing, formal verification, simulations.  
@@ -80,3 +87,5 @@ This project is in the **idea and design phase**. Planned enhancements include:
 ## Note
 This repository serves as a **proof of ownership** and foundation for a future product or protocol.  
 The idea will be **continuously refactored and enhanced** as feedback, research insights, and technical improvements are incorporated.    
+
+
