@@ -1,0 +1,62 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LifeKeyProtocol
+    network: base-sepolia
+    source:
+      address: "0xC3d5027f9Fcc36A8a876a008D0111FFF7FA5051a"
+      abi: LifeKeyProtocol
+      startBlock: 31854321
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AssetsAdded
+        - BeneficiariesRemoved
+        - BeneficiariesUpdated
+        - Initialized
+        - LifeKeyCreated
+        - LifeKeyDeleted
+        - OwnershipTransferred
+        - RecoveryApproved
+        - RecoveryCancelled
+        - RecoveryClaimed
+        - RecoveryCompleted
+        - RecoveryInitiated
+        - Upgraded
+      abis:
+        - name: LifeKeyProtocol
+          file: ./abis/LifeKeyProtocol.json
+      eventHandlers:
+        - event: AssetsAdded(indexed uint256,indexed address,address[])
+          handler: handleAssetsAdded
+        - event: BeneficiariesRemoved(indexed uint256,indexed address,address[])
+          handler: handleBeneficiariesRemoved
+        - event: BeneficiariesUpdated(indexed uint256,indexed address,address[])
+          handler: handleBeneficiariesUpdated
+        - event: Initialized(uint64)
+          handler: handleInitialized
+        - event: LifeKeyCreated(indexed uint256,indexed address,address[],address[])
+          handler: handleLifeKeyCreated
+        - event: LifeKeyDeleted(indexed uint256,indexed address)
+          handler: handleLifeKeyDeleted
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RecoveryApproved(indexed uint256,indexed address,uint256)
+          handler: handleRecoveryApproved
+        - event: RecoveryCancelled(indexed uint256,indexed address)
+          handler: handleRecoveryCancelled
+        - event: RecoveryClaimed(indexed uint256,indexed address,indexed address)
+          handler: handleRecoveryClaimed
+        - event: RecoveryCompleted(indexed uint256,indexed address)
+          handler: handleRecoveryCompleted
+        - event: RecoveryInitiated(indexed uint256,indexed address,address)
+          handler: handleRecoveryInitiated
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/life-key-protocol.ts
