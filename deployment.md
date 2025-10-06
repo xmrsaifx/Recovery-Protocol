@@ -1,3 +1,5 @@
-  BASE Testnet:
-  LifeKeyProtocol implementation deployed at: 0xC3d5027f9Fcc36A8a876a008D0111FFF7FA5051a
-  LifeKeyProtocol proxy deployed at: 0x539f38Fc92Cc350E7a59718E692b16be759C186C
+BASE Testnet:
+LifeKeyProtocol implementation deployed at: 0x7e2824fF423A5215C58b7E8d89e37cDD13Ba0C39
+LifeKeyProtocol proxy deployed at: 0x8c009B4392B0faFD8231D9DB5Cd60F8946089130
+
+  
