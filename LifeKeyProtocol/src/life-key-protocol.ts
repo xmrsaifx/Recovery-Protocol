@@ -1,7 +1,8 @@
 import {
   AssetsAdded as AssetsAddedEvent,
+  AssetsRemoved as AssetsRemovedEvent,
+  BeneficiariesAdded as BeneficiariesAddedEvent,
   BeneficiariesRemoved as BeneficiariesRemovedEvent,
-  BeneficiariesUpdated as BeneficiariesUpdatedEvent,
   Initialized as InitializedEvent,
   LifeKeyCreated as LifeKeyCreatedEvent,
   LifeKeyDeleted as LifeKeyDeletedEvent,
@@ -15,8 +16,9 @@ import {
 } from "../generated/LifeKeyProtocol/LifeKeyProtocol"
 import {
   AssetsAdded,
+  AssetsRemoved,
+  BeneficiariesAdded,
   BeneficiariesRemoved,
-  BeneficiariesUpdated,
   Initialized,
   LifeKeyCreated,
   LifeKeyDeleted,
@@ -44,6 +46,36 @@ export function handleAssetsAdded(event: AssetsAddedEvent): void {
   entity.save()
 }
 
+export function handleAssetsRemoved(event: AssetsRemovedEvent): void {
+  let entity = new AssetsRemoved(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.lifeKeyId = event.params.lifeKeyId
+  entity.owner = event.params.owner
+  entity.removedAsset = event.params.removedAsset
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleBeneficiariesAdded(event: BeneficiariesAddedEvent): void {
+  let entity = new BeneficiariesAdded(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.lifeKeyId = event.params.lifeKeyId
+  entity.owner = event.params.owner
+  entity.newBeneficiaries = event.params.newBeneficiaries
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
 export function handleBeneficiariesRemoved(
   event: BeneficiariesRemovedEvent
 ): void {
@@ -53,23 +85,6 @@ export function handleBeneficiariesRemoved(
   entity.lifeKeyId = event.params.lifeKeyId
   entity.owner = event.params.owner
   entity.removedBeneficiaries = event.params.removedBeneficiaries
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleBeneficiariesUpdated(
-  event: BeneficiariesUpdatedEvent
-): void {
-  let entity = new BeneficiariesUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.lifeKeyId = event.params.lifeKeyId
-  entity.owner = event.params.owner
-  entity.newBeneficiaries = event.params.newBeneficiaries
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -97,8 +112,6 @@ export function handleLifeKeyCreated(event: LifeKeyCreatedEvent): void {
   )
   entity.lifeKeyId = event.params.lifeKeyId
   entity.owner = event.params.owner
-  entity.beneficiaries = event.params.beneficiaries
-  entity.assets = event.params.assets
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

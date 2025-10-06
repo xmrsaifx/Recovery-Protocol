@@ -8,17 +8,18 @@ dataSources:
     name: LifeKeyProtocol
     network: base-sepolia
     source:
-      address: "0xC3d5027f9Fcc36A8a876a008D0111FFF7FA5051a"
+      address: "0x7e2824fF423A5215C58b7E8d89e37cDD13Ba0C39"
       abi: LifeKeyProtocol
-      startBlock: 31854321
+      startBlock: 31995304
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - AssetsAdded
+        - AssetsRemoved
+        - BeneficiariesAdded
         - BeneficiariesRemoved
-        - BeneficiariesUpdated
         - Initialized
         - LifeKeyCreated
         - LifeKeyDeleted
@@ -33,15 +34,17 @@ dataSources:
         - name: LifeKeyProtocol
           file: ./abis/LifeKeyProtocol.json
       eventHandlers:
-        - event: AssetsAdded(indexed uint256,indexed address,address[])
+        - event: AssetsAdded(indexed uint256,indexed address,indexed address)
           handler: handleAssetsAdded
-        - event: BeneficiariesRemoved(indexed uint256,indexed address,address[])
+        - event: AssetsRemoved(indexed uint256,indexed address,indexed address)
+          handler: handleAssetsRemoved
+        - event: BeneficiariesAdded(indexed uint256,indexed address,indexed address)
+          handler: handleBeneficiariesAdded
+        - event: BeneficiariesRemoved(indexed uint256,indexed address,indexed address)
           handler: handleBeneficiariesRemoved
-        - event: BeneficiariesUpdated(indexed uint256,indexed address,address[])
-          handler: handleBeneficiariesUpdated
         - event: Initialized(uint64)
           handler: handleInitialized
-        - event: LifeKeyCreated(indexed uint256,indexed address,address[],address[])
+        - event: LifeKeyCreated(indexed uint256,indexed address)
           handler: handleLifeKeyCreated
         - event: LifeKeyDeleted(indexed uint256,indexed address)
           handler: handleLifeKeyDeleted

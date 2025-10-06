@@ -2,8 +2,9 @@ import { newMockEvent } from "matchstick-as"
 import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts"
 import {
   AssetsAdded,
+  AssetsRemoved,
+  BeneficiariesAdded,
   BeneficiariesRemoved,
-  BeneficiariesUpdated,
   Initialized,
   LifeKeyCreated,
   LifeKeyDeleted,
@@ -19,7 +20,7 @@ import {
 export function createAssetsAddedEvent(
   lifeKeyId: BigInt,
   owner: Address,
-  newAssets: Array<Address>
+  newAssets: Address
 ): AssetsAdded {
   let assetsAddedEvent = changetype<AssetsAdded>(newMockEvent())
 
@@ -35,19 +36,72 @@ export function createAssetsAddedEvent(
     new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
   )
   assetsAddedEvent.parameters.push(
-    new ethereum.EventParam(
-      "newAssets",
-      ethereum.Value.fromAddressArray(newAssets)
-    )
+    new ethereum.EventParam("newAssets", ethereum.Value.fromAddress(newAssets))
   )
 
   return assetsAddedEvent
 }
 
+export function createAssetsRemovedEvent(
+  lifeKeyId: BigInt,
+  owner: Address,
+  removedAsset: Address
+): AssetsRemoved {
+  let assetsRemovedEvent = changetype<AssetsRemoved>(newMockEvent())
+
+  assetsRemovedEvent.parameters = new Array()
+
+  assetsRemovedEvent.parameters.push(
+    new ethereum.EventParam(
+      "lifeKeyId",
+      ethereum.Value.fromUnsignedBigInt(lifeKeyId)
+    )
+  )
+  assetsRemovedEvent.parameters.push(
+    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
+  )
+  assetsRemovedEvent.parameters.push(
+    new ethereum.EventParam(
+      "removedAsset",
+      ethereum.Value.fromAddress(removedAsset)
+    )
+  )
+
+  return assetsRemovedEvent
+}
+
+export function createBeneficiariesAddedEvent(
+  lifeKeyId: BigInt,
+  owner: Address,
+  newBeneficiaries: Address
+): BeneficiariesAdded {
+  let beneficiariesAddedEvent = changetype<BeneficiariesAdded>(newMockEvent())
+
+  beneficiariesAddedEvent.parameters = new Array()
+
+  beneficiariesAddedEvent.parameters.push(
+    new ethereum.EventParam(
+      "lifeKeyId",
+      ethereum.Value.fromUnsignedBigInt(lifeKeyId)
+    )
+  )
+  beneficiariesAddedEvent.parameters.push(
+    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
+  )
+  beneficiariesAddedEvent.parameters.push(
+    new ethereum.EventParam(
+      "newBeneficiaries",
+      ethereum.Value.fromAddress(newBeneficiaries)
+    )
+  )
+
+  return beneficiariesAddedEvent
+}
+
 export function createBeneficiariesRemovedEvent(
   lifeKeyId: BigInt,
   owner: Address,
-  removedBeneficiaries: Array<Address>
+  removedBeneficiaries: Address
 ): BeneficiariesRemoved {
   let beneficiariesRemovedEvent = changetype<BeneficiariesRemoved>(
     newMockEvent()
@@ -67,41 +121,11 @@ export function createBeneficiariesRemovedEvent(
   beneficiariesRemovedEvent.parameters.push(
     new ethereum.EventParam(
       "removedBeneficiaries",
-      ethereum.Value.fromAddressArray(removedBeneficiaries)
+      ethereum.Value.fromAddress(removedBeneficiaries)
     )
   )
 
   return beneficiariesRemovedEvent
-}
-
-export function createBeneficiariesUpdatedEvent(
-  lifeKeyId: BigInt,
-  owner: Address,
-  newBeneficiaries: Array<Address>
-): BeneficiariesUpdated {
-  let beneficiariesUpdatedEvent = changetype<BeneficiariesUpdated>(
-    newMockEvent()
-  )
-
-  beneficiariesUpdatedEvent.parameters = new Array()
-
-  beneficiariesUpdatedEvent.parameters.push(
-    new ethereum.EventParam(
-      "lifeKeyId",
-      ethereum.Value.fromUnsignedBigInt(lifeKeyId)
-    )
-  )
-  beneficiariesUpdatedEvent.parameters.push(
-    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
-  )
-  beneficiariesUpdatedEvent.parameters.push(
-    new ethereum.EventParam(
-      "newBeneficiaries",
-      ethereum.Value.fromAddressArray(newBeneficiaries)
-    )
-  )
-
-  return beneficiariesUpdatedEvent
 }
 
 export function createInitializedEvent(version: BigInt): Initialized {
@@ -121,9 +145,7 @@ export function createInitializedEvent(version: BigInt): Initialized {
 
 export function createLifeKeyCreatedEvent(
   lifeKeyId: BigInt,
-  owner: Address,
-  beneficiaries: Array<Address>,
-  assets: Array<Address>
+  owner: Address
 ): LifeKeyCreated {
   let lifeKeyCreatedEvent = changetype<LifeKeyCreated>(newMockEvent())
 
@@ -137,15 +159,6 @@ export function createLifeKeyCreatedEvent(
   )
   lifeKeyCreatedEvent.parameters.push(
     new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
-  )
-  lifeKeyCreatedEvent.parameters.push(
-    new ethereum.EventParam(
-      "beneficiaries",
-      ethereum.Value.fromAddressArray(beneficiaries)
-    )
-  )
-  lifeKeyCreatedEvent.parameters.push(
-    new ethereum.EventParam("assets", ethereum.Value.fromAddressArray(assets))
   )
 
   return lifeKeyCreatedEvent

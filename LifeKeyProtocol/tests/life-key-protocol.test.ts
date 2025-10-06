@@ -19,9 +19,9 @@ describe("Describe entity assertions", () => {
   beforeAll(() => {
     let lifeKeyId = BigInt.fromI32(234)
     let owner = Address.fromString("0x0000000000000000000000000000000000000001")
-    let newAssets = [
-      Address.fromString("0x0000000000000000000000000000000000000001")
-    ]
+    let newAssets = Address.fromString(
+      "0x0000000000000000000000000000000000000001"
+    )
     let newAssetsAddedEvent = createAssetsAddedEvent(
       lifeKeyId,
       owner,
@@ -57,7 +57,7 @@ describe("Describe entity assertions", () => {
       "AssetsAdded",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "newAssets",
-      "[0x0000000000000000000000000000000000000001]"
+      "0x0000000000000000000000000000000000000001"
     )
 
     // More assert options:

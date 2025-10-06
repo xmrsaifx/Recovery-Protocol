@@ -31,29 +31,30 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     mapping(uint256 => mapping(address => uint256))
         private beneficiaryApprovalSnapshot;
 
-    event LifeKeyCreated(
-        uint256 indexed lifeKeyId,
-        address indexed owner,
-        address[] beneficiaries,
-        address[] assets
-    );
+    event LifeKeyCreated(uint256 indexed lifeKeyId, address indexed owner);
 
-    event BeneficiariesUpdated(
+    event BeneficiariesAdded(
         uint256 indexed lifeKeyId,
         address indexed owner,
-        address[] newBeneficiaries
+        address indexed newBeneficiaries
     );
 
     event BeneficiariesRemoved(
         uint256 indexed lifeKeyId,
         address indexed owner,
-        address[] removedBeneficiaries
+        address indexed removedBeneficiaries
     );
 
     event AssetsAdded(
         uint256 indexed lifeKeyId,
         address indexed owner,
-        address[] newAssets
+        address indexed newAssets
+    );
+
+    event AssetsRemoved(
+        uint256 indexed lifeKeyId,
+        address indexed owner,
+        address indexed removedAsset
     );
 
     event RecoveryCancelled(uint256 indexed lifeKeyId, address indexed owner);
@@ -111,19 +112,37 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         lifeKeyCreated[msg.sender] = true;
         lifeKeyDetails[lifeKeyID] = newLifeKey;
 
-        emit LifeKeyCreated(lifeKeyID, msg.sender, beneficiaries, assets);
+        emit LifeKeyCreated(lifeKeyID, msg.sender);
+
+        for (uint256 i = 0; i < beneficiaries.length; i++) {
+            emit BeneficiariesAdded(
+                lifeKeyID,
+                newLifeKey.owner,
+                beneficiaries[i]
+            );
+        }
+
+        for (uint256 i = 0; i < assets.length; i++) {
+            emit AssetsAdded(lifeKeyID, newLifeKey.owner, assets[i]);
+        }
+
         return lifeKeyID;
     }
 
-    function updateBeneficiaries(
+    function addBeneficiaries(
         uint256 id,
         address[] calldata newBeneficiaries
     ) external {
         LifeKey storage lifeKey = lifeKeyDetails[id];
         require(lifeKey.id != 0, "LifeKey does not exist");
         require(lifeKey.owner == msg.sender, "Only owner can update");
-        lifeKey.beneficiaries = newBeneficiaries;
-        emit BeneficiariesUpdated(id, lifeKey.owner, newBeneficiaries);
+        for (uint256 i = 0; i < newBeneficiaries.length; i++) {
+            address candidate = newBeneficiaries[i];
+            require(candidate != address(0), "Invalid beneficiary");
+            require(!_isBeneficiary(lifeKey, candidate), "Duplicate beneficiary");
+            lifeKey.beneficiaries.push(candidate);
+            emit BeneficiariesAdded(id, lifeKey.owner, candidate);
+        }
     }
 
     function deleteLifeKey(uint256 id) external {
@@ -146,6 +165,7 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         require(lifeKey.owner == msg.sender, "Only owner can remove");
         address[] storage beneficiaries = lifeKey.beneficiaries;
         uint256 len = beneficiaries.length;
+        require(len > 0, "No beneficiaries to remove");
         address[] memory removals = new address[](beneficiary.length);
         uint256 removedCount;
 
@@ -172,8 +192,8 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
             address[] memory trimmed = new address[](removedCount);
             for (uint256 k = 0; k < removedCount; k++) {
                 trimmed[k] = removals[k];
+                emit BeneficiariesRemoved(id, lifeKey.owner, trimmed[k]);
             }
-            emit BeneficiariesRemoved(id, lifeKey.owner, trimmed);
         }
     }
 
@@ -182,9 +202,36 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         require(lifeKey.id != 0, "LifeKey does not exist");
         require(lifeKey.owner == msg.sender, "Only owner can add assets");
         for (uint256 i = 0; i < newAssets.length; i++) {
-            lifeKey.assets.push(newAssets[i]);
+            address asset = newAssets[i];
+            require(asset != address(0), "Invalid asset");
+            require(!_hasAsset(lifeKey, asset), "Duplicate asset");
+            lifeKey.assets.push(asset);
+            emit AssetsAdded(id, lifeKey.owner, asset);
         }
-        emit AssetsAdded(id, lifeKey.owner, newAssets);
+    }
+
+    function removeAssets(uint256 id, address[] calldata assetsToRemove) external {
+        LifeKey storage lifeKey = lifeKeyDetails[id];
+        require(lifeKey.id != 0, "LifeKey does not exist");
+        require(lifeKey.owner == msg.sender, "Only owner can remove");
+        address[] storage assets = lifeKey.assets;
+        uint256 len = assets.length;
+
+        for (uint256 j = 0; j < assetsToRemove.length; j++) {
+            address target = assetsToRemove[j];
+            for (uint256 i = 0; i < len; ) {
+                if (assets[i] == target) {
+                    address removedAsset = assets[i];
+                    assets[i] = assets[len - 1];
+                    assets.pop();
+                    len--;
+                    emit AssetsRemoved(id, lifeKey.owner, removedAsset);
+                    break;
+                } else {
+                    unchecked { i++; }
+                }
+            }
+        }
     }
 
     function cancleRecoveryRequest(uint256 id) external {
@@ -291,6 +338,19 @@ contract LifeKeyProtocol is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         address[] storage beneficiaries = lifeKey.beneficiaries;
         for (uint256 i = 0; i < beneficiaries.length; i++) {
             if (beneficiaries[i] == account) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function _hasAsset(
+        LifeKey storage lifeKey,
+        address asset
+    ) internal view returns (bool) {
+        address[] storage assets = lifeKey.assets;
+        for (uint256 i = 0; i < assets.length; i++) {
+            if (assets[i] == asset) {
                 return true;
             }
         }

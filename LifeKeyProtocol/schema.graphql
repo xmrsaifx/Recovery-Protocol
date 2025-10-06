@@ -2,7 +2,27 @@ type AssetsAdded @entity(immutable: true) {
   id: Bytes!
   lifeKeyId: BigInt! # uint256
   owner: Bytes! # address
-  newAssets: [Bytes!]! # address[]
+  newAssets: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type AssetsRemoved @entity(immutable: true) {
+  id: Bytes!
+  lifeKeyId: BigInt! # uint256
+  owner: Bytes! # address
+  removedAsset: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type BeneficiariesAdded @entity(immutable: true) {
+  id: Bytes!
+  lifeKeyId: BigInt! # uint256
+  owner: Bytes! # address
+  newBeneficiaries: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -12,17 +32,7 @@ type BeneficiariesRemoved @entity(immutable: true) {
   id: Bytes!
   lifeKeyId: BigInt! # uint256
   owner: Bytes! # address
-  removedBeneficiaries: [Bytes!]! # address[]
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type BeneficiariesUpdated @entity(immutable: true) {
-  id: Bytes!
-  lifeKeyId: BigInt! # uint256
-  owner: Bytes! # address
-  newBeneficiaries: [Bytes!]! # address[]
+  removedBeneficiaries: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -40,8 +50,6 @@ type LifeKeyCreated @entity(immutable: true) {
   id: Bytes!
   lifeKeyId: BigInt! # uint256
   owner: Bytes! # address
-  beneficiaries: [Bytes!]! # address[]
-  assets: [Bytes!]! # address[]
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

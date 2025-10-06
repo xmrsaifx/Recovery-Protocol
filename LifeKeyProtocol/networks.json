@@ -1,0 +1,8 @@
+{
+  "base-sepolia": {
+    "LifeKeyProtocol": {
+      "address": "0x7e2824fF423A5215C58b7E8d89e37cDD13Ba0C39",
+      "startBlock": 31995304
+    }
+  }
+}

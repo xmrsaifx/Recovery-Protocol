@@ -63,10 +63,10 @@
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "address[]",
+        "indexed": true,
+        "internalType": "address",
         "name": "newAssets",
-        "type": "address[]"
+        "type": "address"
       }
     ],
     "name": "AssetsAdded",
@@ -88,13 +88,13 @@
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "removedBeneficiaries",
-        "type": "address[]"
+        "indexed": true,
+        "internalType": "address",
+        "name": "removedAsset",
+        "type": "address"
       }
     ],
-    "name": "BeneficiariesRemoved",
+    "name": "AssetsRemoved",
     "type": "event"
   },
   {
@@ -113,13 +113,38 @@
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "address[]",
+        "indexed": true,
+        "internalType": "address",
         "name": "newBeneficiaries",
-        "type": "address[]"
+        "type": "address"
       }
     ],
-    "name": "BeneficiariesUpdated",
+    "name": "BeneficiariesAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "lifeKeyId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "removedBeneficiaries",
+        "type": "address"
+      }
+    ],
+    "name": "BeneficiariesRemoved",
     "type": "event"
   },
   {
@@ -149,18 +174,6 @@
         "internalType": "address",
         "name": "owner",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "beneficiaries",
-        "type": "address[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "assets",
-        "type": "address[]"
       }
     ],
     "name": "LifeKeyCreated",
@@ -348,6 +361,20 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      {
+        "internalType": "address[]",
+        "name": "newBeneficiaries",
+        "type": "address[]"
+      }
+    ],
+    "name": "addBeneficiaries",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
     "name": "approveRecovery",
     "outputs": [],
@@ -460,6 +487,20 @@
       { "internalType": "uint256", "name": "id", "type": "uint256" },
       {
         "internalType": "address[]",
+        "name": "assetsToRemove",
+        "type": "address[]"
+      }
+    ],
+    "name": "removeAssets",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      {
+        "internalType": "address[]",
         "name": "beneficiary",
         "type": "address[]"
       }
@@ -481,20 +522,6 @@
       { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "id", "type": "uint256" },
-      {
-        "internalType": "address[]",
-        "name": "newBeneficiaries",
-        "type": "address[]"
-      }
-    ],
-    "name": "updateBeneficiaries",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
