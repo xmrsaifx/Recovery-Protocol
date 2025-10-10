@@ -1,4 +1,7 @@
 
+import { gql, useQuery } from 'urql';
+import { useAccount } from 'wagmi';
+
 const LIFEKEY_QUERY = gql`
   query LifeKeyData($owner: Bytes!) {
     lifeKeyCreateds(where: { owner: $owner }) {
@@ -22,6 +25,7 @@ const LIFEKEY_QUERY = gql`
   }
 `;
 
+export function LifeKeyGraphSection() {
   const { address } = useAccount();
   const [result] = useQuery({
     query: LIFEKEY_QUERY,
