@@ -49,6 +49,9 @@ export interface RecoveryTimelineProps {
 }
 
 export function RecoveryTimeline({ approvals, totalBeneficiaries, proposalActive, newOwnerReady }: RecoveryTimelineProps) {
+  const approvalsComplete = totalBeneficiaries > 0 && approvals >= totalBeneficiaries;
+  const claimReady = approvalsComplete && newOwnerReady;
+
   const steps: Array<{ title: string; subtitle: string; icon: LucideIcon; status: 'pending' | 'active' | 'completed' }> = [
     {
       title: 'Initiate recovery',
@@ -71,9 +74,13 @@ export function RecoveryTimeline({ approvals, totalBeneficiaries, proposalActive
     },
     {
       title: 'Claim LifeKey',
-      subtitle: newOwnerReady ? 'Ready for claim' : 'Waiting for completion',
+      subtitle: claimReady
+        ? 'Ready for claim'
+        : approvalsComplete
+        ? 'Waiting for completion'
+        : 'Awaiting approvals',
       icon: Crown,
-      status: newOwnerReady ? 'active' : approvals >= totalBeneficiaries && totalBeneficiaries > 0 ? 'active' : 'pending'
+      status: claimReady ? 'active' : approvalsComplete ? 'active' : 'pending'
     }
   ];
 

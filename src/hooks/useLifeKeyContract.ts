@@ -31,56 +31,56 @@ export function useLifeKeyWrite() {
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'createLifeKey',
-        args: [beneficiaries, assets]
-      }),
+        args: [beneficiaries as `0x${string}`[], assets as `0x${string}`[]]
+      } as any),
     updateBeneficiaries: (id: bigint, newBeneficiaries: string[]) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'updateBeneficiaries',
-        args: [id, newBeneficiaries]
-      }),
+        args: [id, newBeneficiaries as `0x${string}`[]]
+      } as any),
     removeBeneficiaries: (id: bigint, removals: string[]) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'removeBeneficiaries',
-        args: [id, removals]
-      }),
+        args: [id, removals as `0x${string}`[]]
+      } as any),
     addAssets: (id: bigint, assets: string[]) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'addAssets',
-        args: [id, assets]
-      }),
+        args: [id, assets as `0x${string}`[]]
+      } as any),
     deleteLifeKey: (id: bigint) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'deleteLifeKey',
         args: [id]
-      }),
+      } as any),
     cancelRecovery: (id: bigint) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'cancleRecoveryRequest',
         args: [id]
-      }),
+      } as any),
     initiateRecovery: (id: bigint, proposedOwner: string) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'initiateRecovery',
-        args: [id, proposedOwner]
-      }),
+        args: [id, proposedOwner as `0x${string}`]
+      } as any),
     approveRecovery: (id: bigint) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'approveRecovery',
         args: [id]
-      }),
+      } as any),
     claimLifeKey: (id: bigint) =>
       writeContractAsync({
         ...lifeKeyContract,
         functionName: 'claimLifeKey',
         args: [id]
-      })
+      } as any)
   };
 }
 
